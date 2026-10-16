@@ -1,1 +1,147 @@
 @import 'tailwindcss';
+
+/*
+ * Design tokens — spring-mint / black / white system.
+ * Mint (#00f0a0) is the single accent: logo, highlights, the one green pill.
+ * It is too light for text or focus rings on white, so those use ink.
+ */
+@theme {
+  /* Fonts */
+  --font-display: 'Titillium Web', 'Arial Narrow', system-ui, sans-serif;
+  --font-sans: 'Inter', Helvetica, Arial, sans-serif;
+
+  /* Brand & accent */
+  --color-primary: #00f0a0;
+  --color-on-primary: #000000;
+
+  /* Surface */
+  --color-canvas: #ffffff;
+  --color-canvas-mint: #ecffe0;
+  --color-surface-soft: #f2f4f5;
+  --color-hairline: #e5e7eb;
+
+  /* Text */
+  --color-ink: #000000;
+  --color-muted: #86909c;
+  --color-on-dark: #ffffff;
+
+  /* Functional — status/error states only, never brand chrome */
+  --color-danger: #d92d20;
+  --color-danger-soft: #fef3f2;
+
+  /* Type scale: size / line-height / letter-spacing / weight */
+  --text-display: 80px;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -1px;
+  --text-display--font-weight: 700;
+  --text-heading-1: 60px;
+  --text-heading-1--line-height: 1.1;
+  --text-heading-1--letter-spacing: -0.5px;
+  --text-heading-1--font-weight: 700;
+  --text-heading-2: 48px;
+  --text-heading-2--line-height: 1.15;
+  --text-heading-2--font-weight: 700;
+  --text-heading-3: 38px;
+  --text-heading-3--line-height: 1.2;
+  --text-heading-3--font-weight: 700;
+  --text-heading-4: 32px;
+  --text-heading-4--line-height: 1.25;
+  --text-heading-4--font-weight: 600;
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--font-weight: 300;
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.6;
+  --text-body-md--font-weight: 500;
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 1.5;
+  --text-body-sm--font-weight: 500;
+  --text-button: 16px;
+  --text-button--line-height: 1;
+  --text-button--font-weight: 600;
+  --text-nav-link: 14px;
+  --text-nav-link--line-height: 1.4;
+  --text-nav-link--font-weight: 600;
+  --text-caption: 13px;
+  --text-caption--line-height: 1.4;
+  --text-caption--font-weight: 500;
+
+  /*
+   * Spacing: use Tailwind's default numeric scale, which already matches the
+   * 8px system — xxs 1 (4px) · xs 2 · sm 3 · md 4 · lg 6 · xl 8 · xxl 12 ·
+   * section 24 (96px). Named --spacing-* keys are avoided on purpose: they
+   * override max-w-sm/md/lg etc.
+   */
+
+  /* Radius */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-pill-nav: 18px;
+  --radius-lg: 24px;
+  --radius-cta: 28px;
+  --radius-pill: 36px;
+  --radius-card: 40px;
+
+  /* Elevation — hairline or whisper-soft float, never heavy */
+  --shadow-hairline: inset 0 0 0 0.5px rgb(0 0 0 / 0.5);
+  --shadow-float: 0 8px 24px -12px rgb(0 0 0 / 0.12);
+}
+
+@layer base {
+  body {
+    @apply bg-canvas-mint font-sans text-body-md text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ink;
+  }
+}
+
+/* Buttons */
+@utility btn {
+  @apply inline-flex cursor-pointer items-center justify-center gap-2 text-button whitespace-nowrap transition-opacity disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+/* Large black pill — everyday primary CTA */
+@utility btn-primary {
+  @apply btn min-h-11 rounded-cta bg-ink px-12 py-3 text-on-dark hover:opacity-85;
+}
+
+/* Compact black nav pill */
+@utility btn-primary-sm {
+  @apply btn min-h-9 rounded-pill-nav bg-ink px-4 py-1 text-nav-link text-on-dark hover:opacity-85;
+}
+
+/* Signature mint pill — the one accent action per screen */
+@utility btn-green {
+  @apply btn min-h-11 rounded-pill border border-ink bg-primary px-12 py-3 text-on-primary hover:opacity-85;
+}
+
+/* Squarer black utility button */
+@utility btn-dark-square {
+  @apply btn min-h-11 rounded-sm bg-ink px-4 py-3 text-on-dark hover:opacity-85;
+}
+
+/* Cards */
+
+/* White mockup card with the asymmetric 0/40/40/40 silhouette */
+@utility card-feature {
+  @apply rounded-card rounded-tl-none bg-canvas p-6 shadow-float;
+}
+
+/* Standard content card */
+@utility card {
+  @apply rounded-lg border border-hairline bg-canvas p-6;
+}
+
+/* Inputs */
+@utility input {
+  @apply w-full rounded-sm border border-hairline bg-canvas px-4 py-3 text-body-md text-ink placeholder:text-muted;
+}

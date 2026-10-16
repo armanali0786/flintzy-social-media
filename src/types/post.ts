@@ -1,8 +1,16 @@
 export const PLATFORMS = ['facebook', 'instagram', 'x', 'tiktok'] as const
 export type Platform = (typeof PLATFORMS)[number]
 
+export function isPlatform(value: string): value is Platform {
+  return PLATFORMS.some((platform) => platform === value)
+}
+
 export const POST_STATUSES = ['scheduled', 'published', 'failed'] as const
 export type PostStatus = (typeof POST_STATUSES)[number]
+
+export function isPostStatus(value: string): value is PostStatus {
+  return POST_STATUSES.some((status) => status === value)
+}
 
 export interface Post {
   id: string

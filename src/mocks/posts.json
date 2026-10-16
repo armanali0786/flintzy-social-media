@@ -1,0 +1,253 @@
+{
+  "generatedAt": "2026-10-16T12:00:00.000Z",
+  "posts": [
+    {
+      "id": "post-001",
+      "content": "Our autumn blend is back ☕🍂 Notes of toasted hazelnut, dark cherry and a hint of clove. Available in all stores from today.",
+      "platforms": ["instagram", "facebook"],
+      "mediaUrl": "https://picsum.photos/seed/autumn-blend/1080/1080",
+      "scheduledAt": "2026-10-13T13:10:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-002",
+      "content": "Fun fact: a single coffee tree produces only about 1 lb of roasted coffee a year. Make every cup count. ☕",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-13T23:50:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-003",
+      "content": "We're hiring! Ember & Oak is looking for a full-time roaster in Pune. If you love early mornings and the smell of fresh beans, send your CV to careers@emberandoak.example.",
+      "platforms": ["facebook"],
+      "scheduledAt": "2026-10-14T09:55:00.000Z",
+      "status": "failed",
+      "errorMessage": "Facebook Page access token expired. Reconnect the page and try again."
+    },
+    {
+      "id": "post-004",
+      "content": "60 seconds of latte art fails (and one win at the end) 😅 #latteart #baristalife #coffeetok",
+      "platforms": ["tiktok"],
+      "mediaUrl": "https://picsum.photos/seed/latte-art/1080/1080",
+      "scheduledAt": "2026-10-14T13:45:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-005",
+      "content": "Behind the scenes at the roastery. Every batch is cupped before it leaves the building. #specialtycoffee #roastery",
+      "platforms": ["instagram"],
+      "mediaUrl": "https://picsum.photos/seed/roastery/1080/1080",
+      "scheduledAt": "2026-10-15T05:50:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-006",
+      "content": "Flash sale! 20% off all brewing gear for the next 24 hours. Use code BREW20 at checkout.",
+      "platforms": ["x", "facebook"],
+      "scheduledAt": "2026-10-15T09:55:00.000Z",
+      "status": "failed",
+      "errorMessage": "X API rate limit reached. Wait 15 minutes before retrying."
+    },
+    {
+      "id": "post-007",
+      "content": "Pour-over in 4 steps:\n1. Rinse the filter\n2. Bloom for 30 seconds\n3. Pour in slow circles\n4. Enjoy ☕\n#pourover #coffeetips",
+      "platforms": ["instagram", "tiktok"],
+      "mediaUrl": "https://picsum.photos/seed/pour-over/1080/1080",
+      "scheduledAt": "2026-10-15T13:55:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-008",
+      "content": "New mugs just dropped 🧡 Handmade by local potters, each one slightly different.",
+      "platforms": ["instagram"],
+      "mediaUrl": "https://picsum.photos/seed/mugs/1080/1080",
+      "scheduledAt": "2026-10-16T03:50:00.000Z",
+      "status": "failed",
+      "errorMessage": "Instagram rejected the image: aspect ratio must be between 4:5 and 1.91:1."
+    },
+    {
+      "id": "post-009",
+      "content": "Good morning! Our Koregaon Park café now opens at 7 AM on weekdays. See you there. ☀️",
+      "platforms": ["facebook", "x"],
+      "scheduledAt": "2026-10-16T05:55:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-010",
+      "content": "POV: you finally nail the perfect espresso shot 🎯 #espresso #coffeetok",
+      "platforms": ["tiktok"],
+      "mediaUrl": "https://picsum.photos/seed/espresso/1080/1080",
+      "scheduledAt": "2026-10-16T07:55:00.000Z",
+      "status": "failed",
+      "errorMessage": "TikTok requires a video file. Image posts aren't supported for this account."
+    },
+    {
+      "id": "post-011",
+      "content": "Hot take: cold brew is better in winter. Change our minds. 🧊☕",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-16T09:50:00.000Z",
+      "status": "published"
+    },
+    {
+      "id": "post-012",
+      "content": "Thank you for 50,000 followers! 🎉 To celebrate, the first 100 orders today get a free tote bag.",
+      "platforms": ["instagram", "facebook", "x"],
+      "mediaUrl": "https://picsum.photos/seed/celebration/1080/1080",
+      "scheduledAt": "2026-10-16T11:20:00.000Z",
+      "status": "failed",
+      "errorMessage": "Network timeout while uploading media. Please try again."
+    },
+    {
+      "id": "post-013",
+      "content": "Weekend workshop: Home Espresso 101 🛠️ Learn grind size, dosing and milk texturing in two hours. Limited to 12 seats.",
+      "platforms": ["instagram", "facebook"],
+      "mediaUrl": "https://picsum.photos/seed/workshop/1080/1080",
+      "scheduledAt": "2026-10-16T12:55:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-014",
+      "content": "Which brew method are you team? Reply with your favourite:\n☕ Espresso\n🫖 French press\n💧 Pour-over\n🧊 Cold brew",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-16T15:05:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-015",
+      "content": "Watch our head roaster taste 6 coffees in 60 seconds and guess where they're from 🌍 #coffeetasting #cupping",
+      "platforms": ["tiktok", "instagram"],
+      "mediaUrl": "https://picsum.photos/seed/cupping/1080/1080",
+      "scheduledAt": "2026-10-16T17:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-016",
+      "content": "Coffee origins series, part 3: Ethiopia 🇪🇹\n\nEthiopia is widely considered the birthplace of coffee. Legend says a goat herder named Kaldi noticed his goats dancing after eating red berries from a certain shrub. Today, Ethiopian coffees are prized for their bright acidity and floral, tea-like character.\n\nOur current single origin comes from the Guji zone, grown at 2,000 metres by a cooperative of 400 smallholder farmers. Expect jasmine, bergamot and ripe peach.\n\nAvailable in 250 g and 1 kg bags from this Friday.",
+      "platforms": ["facebook"],
+      "mediaUrl": "https://picsum.photos/seed/ethiopia/1080/1080",
+      "scheduledAt": "2026-10-16T22:05:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-017",
+      "content": "Sunday slow mornings ☁️☕ Tag someone you'd share this pot with.",
+      "platforms": ["instagram"],
+      "mediaUrl": "https://picsum.photos/seed/slow-morning/1080/1080",
+      "scheduledAt": "2026-10-17T08:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-018",
+      "content": "Our loyalty app is live! Earn a free drink every 9 cups. Download it from the App Store or Google Play.",
+      "platforms": ["x", "facebook"],
+      "scheduledAt": "2026-10-17T12:00:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-019",
+      "content": "Making a pumpkin spice latte from scratch (no syrup!) 🎃 #pumpkinspice #fallvibes #coffeetok",
+      "platforms": ["tiktok"],
+      "mediaUrl": "https://picsum.photos/seed/pumpkin/1080/1080",
+      "scheduledAt": "2026-10-17T16:15:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-020",
+      "content": "Meet Priya, our newest barista 👋 Her go-to order? A double cortado with oat milk.",
+      "platforms": ["instagram", "facebook"],
+      "mediaUrl": "https://picsum.photos/seed/barista/1080/1080",
+      "scheduledAt": "2026-10-17T22:05:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-021",
+      "content": "Reminder: bring your own cup and get ₹20 off any drink. Small habits, big difference. 🌱",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-18T10:05:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-022",
+      "content": "Community night this Thursday 🎶 Live acoustic music, free tasting flights and 10% of sales go to the city food bank. Doors open at 6 PM.",
+      "platforms": ["facebook"],
+      "mediaUrl": "https://picsum.photos/seed/community-night/1080/1080",
+      "scheduledAt": "2026-10-18T14:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-023",
+      "content": "Diwali gift boxes are here 🪔✨ Three single-origin coffees, a ceramic dripper and handwritten tasting notes.",
+      "platforms": ["instagram", "tiktok"],
+      "mediaUrl": "https://picsum.photos/seed/diwali/1080/1080",
+      "scheduledAt": "2026-10-19T10:05:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-024",
+      "content": "Big news coming Monday. Hint: it's small, it's portable and it makes great espresso. 👀",
+      "platforms": ["x", "instagram", "facebook", "tiktok"],
+      "scheduledAt": "2026-10-19T15:00:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-025",
+      "content": "Wholesale partners: our 2027 price list is now available. Contact wholesale@emberandoak.example for the PDF and samples.",
+      "platforms": ["facebook"],
+      "scheduledAt": "2026-10-20T12:20:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-026",
+      "content": "Decaf doesn't have to be boring. Our new Swiss Water decaf tastes like chocolate and orange peel. 🍫🍊",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-20T16:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-027",
+      "content": "Latte art Friday 🎨 Swipe to see this week's best pour from our team.",
+      "platforms": ["instagram"],
+      "mediaUrl": "https://picsum.photos/seed/latte-friday/1080/1080",
+      "scheduledAt": "2026-10-21T12:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-028",
+      "content": "3 mistakes everyone makes with a French press (we've made all of them) #coffeehacks #frenchpress",
+      "platforms": ["tiktok", "x"],
+      "scheduledAt": "2026-10-22T12:10:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-029",
+      "content": "From farm to cup: this month we're visiting our partner farms in Chikmagalur. Follow along in our stories all week. 🌿",
+      "platforms": ["facebook", "instagram"],
+      "mediaUrl": "https://picsum.photos/seed/chikmagalur/1080/1080",
+      "scheduledAt": "2026-10-23T12:20:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-030",
+      "content": "Coffee pairing of the week: our Colombian medium roast + a warm almond croissant. 🥐",
+      "platforms": ["x"],
+      "scheduledAt": "2026-10-24T20:15:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-031",
+      "content": "One year of Ember & Oak Koregaon Park 🎂 Join us on Saturday for free cake, a raffle and our anniversary blend.",
+      "platforms": ["instagram", "tiktok", "facebook"],
+      "mediaUrl": "https://picsum.photos/seed/anniversary/1080/1080",
+      "scheduledAt": "2026-10-26T01:40:00.000Z",
+      "status": "scheduled"
+    },
+    {
+      "id": "post-032",
+      "content": "Thank you for an incredible month! Here's a look back at our favourite customer photos from October. 📸",
+      "platforms": ["facebook"],
+      "mediaUrl": "https://picsum.photos/seed/october-recap/1080/1080",
+      "scheduledAt": "2026-10-27T09:00:00.000Z",
+      "status": "scheduled"
+    }
+  ]
+}

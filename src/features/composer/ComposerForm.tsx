@@ -6,6 +6,7 @@ import { getLocalTimeZone } from '@/lib/dates'
 import { PLATFORM_CONFIG } from '@/lib/platforms'
 import { isHttpUrl } from '@/lib/url'
 import { PLATFORMS, type Platform } from '@/types/post'
+import { CharacterCounters } from './CharacterCounters'
 
 export interface ComposerValues {
   content: string
@@ -47,10 +48,16 @@ export function ComposerForm({ onCancel }: { onCancel: () => void }) {
           rows={6}
           className="input resize-y"
           placeholder="What do you want to share?"
+          aria-describedby={`${id}-counts`}
           value={values.content}
           onChange={(event) =>
             setValues({ ...values, content: event.target.value })
           }
+        />
+        <CharacterCounters
+          id={`${id}-counts`}
+          content={values.content}
+          platforms={values.platforms}
         />
       </div>
 

@@ -118,4 +118,55 @@ describe('post composer', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
+
+  describe('character counters', () => {
+    // The textarea is described by the counters, so its accessible
+    // description is exactly what a screen reader announces.
+    const expectCounts = (dialog: HTMLElement, description: string) =>
+      expect(
+        within(dialog).getByLabelText('Post content'),
+      ).toHaveAccessibleDescription(description)
+
+    it('asks for a platform before showing limits', async () => {
+      const { dialog } = await openComposer()
+
+      expect(
+        within(dialog).getByText(
+          'Select a platform to see its character limit.',
+        ),
+      ).toBeInTheDocument()
+    })
+
+    it('shows a live count for each selected platform', async () => {
+      const { user, dialog } = await openComposer()
+      const form = within(dialog)
+
+      await user.click(form.getByRole('checkbox', { name: 'Facebook' }))
+      await user.click(form.getByRole('checkbox', { name: 'X' }))
+      await user.type(form.getByLabelText('Post content'), 'Hi ☕')
+
+      expectCounts(dialog, 'Facebook:4 / 5,000 X:4 / 280')
+    })
+
+    it('accepts exactly 280 characters for X and flags 281', async () => {
+      const { user, dialog } = await openComposer()
+      const form = within(dialog)
+      const content = form.getByLabelText('Post content')
+
+      await user.click(form.getByRole('checkbox', { name: 'X' }))
+      await user.click(form.getByRole('checkbox', { name: 'Instagram' }))
+      await user.click(content)
+      await user.paste('a'.repeat(280))
+      expectCounts(dialog, 'Instagram:280 / 2,200 X:280 / 280')
+      expect(form.queryByText(/over\)/)).toBeNull()
+
+      await user.type(content, 'b')
+      expectCounts(dialog, 'Instagram:281 / 2,200 X:281 / 280 (1 over)')
+      const [instagram, x] = within(
+        form.getByRole('list', { name: 'Character count' }),
+      ).getAllByRole('listitem')
+      expect(x).toHaveClass('text-danger')
+      expect(instagram).not.toHaveClass('text-danger')
+    })
+  })
 })

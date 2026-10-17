@@ -1,3 +1,4 @@
+import { countCharacters } from '@/lib/characterCount'
 import { PLATFORM_CONFIG } from '@/lib/platforms'
 import { PLATFORMS, POST_STATUSES } from '@/types/post'
 import { loadMockPosts } from './loadMockPosts'
@@ -36,7 +37,7 @@ describe('loadMockPosts', () => {
     for (const post of posts) {
       expect(post.platforms.length).toBeGreaterThan(0)
       for (const platform of post.platforms) {
-        expect(Array.from(post.content).length).toBeLessThanOrEqual(
+        expect(countCharacters(post.content)).toBeLessThanOrEqual(
           PLATFORM_CONFIG[platform].charLimit,
         )
       }

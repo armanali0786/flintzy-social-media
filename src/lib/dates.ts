@@ -40,3 +40,7 @@ export function groupPostsByDay(posts: Post[], now = new Date()): DayGroup[] {
 
   return groups
 }
+
+export function getLocalTimeZone(): string {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone
+}

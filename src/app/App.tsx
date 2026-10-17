@@ -1,3 +1,6 @@
+import { PostQueue } from '@/features/posts/PostQueue'
+import { getLocalTimeZone } from '@/lib/dates'
+
 export function App() {
   return (
     <div className="min-h-dvh">
@@ -12,7 +15,15 @@ export function App() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl p-4 sm:py-12" />
+      <main className="mx-auto max-w-3xl p-4 sm:py-12">
+        <div className="mb-6">
+          <h2 className="text-heading-4">Post queue</h2>
+          <p className="text-body-sm text-muted">
+            Times shown in your time zone ({getLocalTimeZone()})
+          </p>
+        </div>
+        <PostQueue />
+      </main>
     </div>
   )
 }

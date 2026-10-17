@@ -1,7 +1,8 @@
 import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { postsApi } from '@/api/postsApi'
-import { renderWithQueryClient } from '@/test/renderWithQueryClient'
+import { EMPTY_FILTERS } from '@/features/filters/filterParams'
+import { renderWithProviders } from '@/test/renderWithProviders'
 import type { Post } from '@/types/post'
 import { PostQueue } from './PostQueue'
 
@@ -33,7 +34,9 @@ describe('PostQueue', () => {
       makePost('b', '2026-10-17T05:00:00.000Z'),
       makePost('a', '2026-10-16T09:00:00.000Z'),
     ])
-    renderWithQueryClient(<PostQueue />)
+    renderWithProviders(
+      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
+    )
 
     expect(screen.getByRole('status')).toHaveTextContent('Loading posts')
 
@@ -49,7 +52,9 @@ describe('PostQueue', () => {
 
   it('shows an empty state when there are no posts', async () => {
     vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
-    renderWithQueryClient(<PostQueue />)
+    renderWithProviders(
+      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
+    )
 
     expect(await screen.findByText('No posts yet')).toBeInTheDocument()
   })
@@ -58,7 +63,9 @@ describe('PostQueue', () => {
     vi.spyOn(postsApi, 'getPosts')
       .mockRejectedValueOnce(new Error('Network down'))
       .mockResolvedValueOnce([makePost('a', '2026-10-16T09:00:00.000Z')])
-    renderWithQueryClient(<PostQueue />)
+    renderWithProviders(
+      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
+    )
 
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent("We couldn't load your posts.")

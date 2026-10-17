@@ -1,25 +1,14 @@
 import clsx from 'clsx'
+import { STATUS_LABELS } from '@/lib/statuses'
 import type { PostStatus } from '@/types/post'
 
-const STATUS_STYLES: Record<
-  PostStatus,
-  { label: string; badge: string; dot: string }
-> = {
-  scheduled: {
-    label: 'Scheduled',
-    badge: 'bg-surface-soft text-ink',
-    dot: 'bg-muted',
-  },
+const STATUS_STYLES: Record<PostStatus, { badge: string; dot: string }> = {
+  scheduled: { badge: 'bg-surface-soft text-ink', dot: 'bg-muted' },
   published: {
-    label: 'Published',
     badge: 'bg-canvas-mint text-ink',
     dot: 'bg-primary ring-1 ring-ink',
   },
-  failed: {
-    label: 'Failed',
-    badge: 'bg-danger-soft text-danger',
-    dot: 'bg-danger',
-  },
+  failed: { badge: 'bg-danger-soft text-danger', dot: 'bg-danger' },
 }
 
 export function StatusBadge({ status }: { status: PostStatus }) {
@@ -36,7 +25,7 @@ export function StatusBadge({ status }: { status: PostStatus }) {
         aria-hidden="true"
         className={clsx('size-1.5 rounded-full', style.dot)}
       />
-      {style.label}
+      {STATUS_LABELS[status]}
     </span>
   )
 }

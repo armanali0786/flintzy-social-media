@@ -18,11 +18,14 @@ const ICONS: Record<Platform, SimpleIcon> = {
 interface PlatformIconProps {
   platform: Platform
   className?: string
+  /** Use the current text colour instead of the brand colour. */
+  monochrome?: boolean
 }
 
 export function PlatformIcon({
   platform,
   className = 'size-4',
+  monochrome = false,
 }: PlatformIconProps) {
   const icon = ICONS[platform]
   const label = PLATFORM_CONFIG[platform].label
@@ -32,7 +35,7 @@ export function PlatformIcon({
       role="img"
       aria-label={label}
       viewBox="0 0 24 24"
-      fill={`#${icon.hex}`}
+      fill={monochrome ? 'currentColor' : `#${icon.hex}`}
       className={className}
     >
       <title>{label}</title>

@@ -1,8 +1,18 @@
+import {
+  filterPosts,
+  hasActiveFilters,
+  type PostFilters,
+} from '@/features/filters/filterParams'
 import { groupPostsByDay } from '@/lib/dates'
 import { PostCard } from './PostCard'
 import { usePosts } from './usePosts'
 
-export function PostQueue() {
+interface PostQueueProps {
+  filters: PostFilters
+  onClearFilters: () => void
+}
+
+export function PostQueue({ filters, onClearFilters }: PostQueueProps) {
   const { data: posts, isPending, isError, refetch } = usePosts()
 
   if (isPending) {
@@ -42,9 +52,36 @@ export function PostQueue() {
     )
   }
 
+  const visiblePosts = filterPosts(posts, filters)
+
+  if (visiblePosts.length === 0) {
+    return (
+      <div className="card flex flex-col items-center gap-4 text-center">
+        <div>
+          <p className="font-semibold">No posts match your filters</p>
+          <p className="text-body-sm text-muted">
+            Try a different search or remove some filters.
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn-primary-sm"
+          onClick={onClearFilters}
+        >
+          Clear filters
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-8">
-      {groupPostsByDay(posts).map((group) => (
+      {hasActiveFilters(filters) && (
+        <p role="status" className="text-body-sm text-muted">
+          Showing {visiblePosts.length} of {posts.length} posts
+        </p>
+      )}
+      {groupPostsByDay(visiblePosts).map((group) => (
         <section key={group.key} aria-labelledby={`day-${group.key}`}>
           <h3
             id={`day-${group.key}`}

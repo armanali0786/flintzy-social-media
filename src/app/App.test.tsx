@@ -1,11 +1,11 @@
 import { screen } from '@testing-library/react'
 import { postsApi } from '@/api/postsApi'
-import { renderWithQueryClient } from '@/test/renderWithQueryClient'
+import { renderWithProviders } from '@/test/renderWithProviders'
 import { App } from './App'
 
 test('renders the app heading and local time zone', () => {
   vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
-  renderWithQueryClient(<App />)
+  renderWithProviders(<App />)
 
   expect(
     screen.getByRole('heading', { name: 'Flintzy Scheduler' }),

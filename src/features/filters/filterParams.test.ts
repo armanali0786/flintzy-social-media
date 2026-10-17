@@ -4,7 +4,6 @@ import {
   filterPosts,
   hasActiveFilters,
   parseFilters,
-  toggleValue,
   toSearchParams,
 } from './filterParams'
 
@@ -68,18 +67,6 @@ describe('toSearchParams', () => {
     const base = new URLSearchParams('?ref=email&platform=x&q=old')
     const params = toSearchParams({ ...EMPTY_FILTERS, query: 'new' }, base)
     expect(params.toString()).toBe('ref=email&q=new')
-  })
-})
-
-describe('toggleValue', () => {
-  const order = ['a', 'b', 'c'] as const
-
-  it('adds a missing value in canonical order', () => {
-    expect(toggleValue(['c'], 'a', order)).toEqual(['a', 'c'])
-  })
-
-  it('removes a present value', () => {
-    expect(toggleValue(['a', 'c'], 'c', order)).toEqual(['a'])
   })
 })
 

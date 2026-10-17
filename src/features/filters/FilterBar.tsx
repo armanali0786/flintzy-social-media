@@ -121,12 +121,7 @@ function Chip({ pressed, onClick, children }: ChipProps) {
       type="button"
       aria-pressed={pressed}
       onClick={onClick}
-      className={clsx(
-        'btn min-h-9 rounded-pill-nav border px-3 text-nav-link',
-        pressed
-          ? 'border-ink bg-ink text-on-dark'
-          : 'border-hairline bg-canvas text-ink hover:border-ink',
-      )}
+      className={clsx('chip', pressed && 'chip-selected')}
     >
       {children}
     </button>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
+import { toggleValue } from '@/lib/arrays'
 import {
   PLATFORMS,
   POST_STATUSES,
@@ -9,7 +10,6 @@ import {
 import {
   EMPTY_FILTERS,
   parseFilters,
-  toggleValue,
   toSearchParams,
   type PostFilters,
 } from './filterParams'

@@ -102,6 +102,11 @@
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ink;
   }
+
+  /* Stop the page behind an open modal from scrolling */
+  html:has(dialog[open]) {
+    @apply overflow-hidden;
+  }
 }
 
 /* Buttons */
@@ -127,6 +132,15 @@
 /* Squarer black utility button */
 @utility btn-dark-square {
   @apply btn min-h-11 rounded-sm bg-ink px-4 py-3 text-on-dark hover:opacity-85;
+}
+
+/* Toggle chips (filters, platform pickers) */
+@utility chip {
+  @apply btn min-h-9 rounded-pill-nav border border-hairline bg-canvas px-3 text-nav-link text-ink hover:border-ink;
+}
+
+@utility chip-selected {
+  @apply border-ink bg-ink text-on-dark;
 }
 
 /* Cards */

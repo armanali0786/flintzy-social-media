@@ -67,12 +67,6 @@ export function toSearchParams(
   return params
 }
 
-export function toggleValue<T>(list: T[], value: T, order: readonly T[]): T[] {
-  return order.filter((item) =>
-    item === value ? !list.includes(item) : list.includes(item),
-  )
-}
-
 export function hasActiveFilters(filters: PostFilters): boolean {
   return (
     filters.platforms.length > 0 ||

@@ -90,14 +90,6 @@ describe('post composer', () => {
     expect(input).toHaveValue('2026-10-20T09:30')
   })
 
-  it('keeps scheduling disabled until validation is added', async () => {
-    const { dialog } = await openComposer()
-
-    expect(
-      within(dialog).getByRole('button', { name: 'Schedule post' }),
-    ).toBeDisabled()
-  })
-
   it('closes on Cancel and starts with an empty form next time', async () => {
     const { user, dialog } = await openComposer()
 

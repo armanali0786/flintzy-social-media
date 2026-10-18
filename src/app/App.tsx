@@ -57,7 +57,8 @@ export function App() {
       </main>
 
       <Modal open={composerOpen} title="New post" onClose={closeComposer}>
-        <ComposerForm onCancel={closeComposer} />
+        {/* Saving the post is added in the next phase. */}
+        <ComposerForm onSubmit={() => {}} onCancel={closeComposer} />
       </Modal>
     </div>
   )

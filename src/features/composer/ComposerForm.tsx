@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useId, useState } from 'react'
+import { useId, useState, type FormEvent } from 'react'
 import { PlatformIcon } from '@/components/PlatformIcon'
 import { toggleValue } from '@/lib/arrays'
 import { getLocalTimeZone } from '@/lib/dates'
@@ -7,26 +7,45 @@ import { PLATFORM_CONFIG } from '@/lib/platforms'
 import { isHttpUrl } from '@/lib/url'
 import { PLATFORMS, type Platform } from '@/types/post'
 import { CharacterCounters } from './CharacterCounters'
+import {
+  COMPOSER_FIELDS,
+  INITIAL_VALUES,
+  validateComposer,
+  type ComposerField,
+  type ComposerValues,
+} from './composerValues'
 
-export interface ComposerValues {
-  content: string
-  platforms: Platform[]
-  mediaUrl: string
-  /** Value of the datetime-local input, e.g. "2026-10-20T09:30" (local time) */
-  scheduledAt: string
+interface ComposerFormProps {
+  onSubmit: (values: ComposerValues) => void
+  onCancel: () => void
 }
 
-const INITIAL_VALUES: ComposerValues = {
-  content: '',
-  platforms: [],
-  mediaUrl: '',
-  scheduledAt: '',
-}
-
-export function ComposerForm({ onCancel }: { onCancel: () => void }) {
+export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
   const [values, setValues] = useState(INITIAL_VALUES)
+  const [touched, setTouched] = useState<ReadonlySet<ComposerField>>(new Set())
+  const [submitAttempted, setSubmitAttempted] = useState(false)
   const id = useId()
+
+  const errors = validateComposer(values)
   const mediaUrl = values.mediaUrl.trim()
+
+  const fieldId: Record<ComposerField, string> = {
+    content: `${id}-content`,
+    platforms: `${id}-platforms`,
+    mediaUrl: `${id}-media`,
+    scheduledAt: `${id}-time`,
+  }
+  const errorId = (field: ComposerField) => `${fieldId[field]}-error`
+  const visibleError = (field: ComposerField) =>
+    submitAttempted || touched.has(field) ? errors[field] : undefined
+
+  const markTouched = (field: ComposerField) =>
+    setTouched((current) => new Set(current).add(field))
+
+  const update = <K extends ComposerField>(
+    field: K,
+    value: ComposerValues[K],
+  ) => setValues((current) => ({ ...current, [field]: value }))
 
   const togglePlatform = (platform: Platform) =>
     setValues((current) => ({
@@ -34,37 +53,68 @@ export function ComposerForm({ onCancel }: { onCancel: () => void }) {
       platforms: toggleValue(current.platforms, platform, PLATFORMS),
     }))
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const firstInvalid = COMPOSER_FIELDS.find((field) => errors[field])
+
+    if (firstInvalid) {
+      setSubmitAttempted(true)
+      document.getElementById(fieldId[firstInvalid])?.focus()
+      return
+    }
+    onSubmit(values)
+  }
+
+  /** Props that connect a field to its hint and error message. */
+  const a11yProps = (field: ComposerField, hintId?: string) => {
+    const error = visibleError(field)
+    const describedBy = [hintId, error && errorId(field)]
+      .filter(Boolean)
+      .join(' ')
+    return {
+      'aria-invalid': error ? true : undefined,
+      'aria-describedby': describedBy || undefined,
+    }
+  }
+
   return (
-    <form
-      className="flex flex-col gap-6"
-      onSubmit={(event) => event.preventDefault()}
-    >
+    <form className="flex flex-col gap-6" noValidate onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
-        <label htmlFor={`${id}-content`} className="font-semibold">
+        <label htmlFor={fieldId.content} className="font-semibold">
           Post content
         </label>
         <textarea
-          id={`${id}-content`}
+          id={fieldId.content}
           rows={6}
-          className="input resize-y"
+          className="input resize-y aria-invalid:border-danger"
           placeholder="What do you want to share?"
-          aria-describedby={`${id}-counts`}
           value={values.content}
-          onChange={(event) =>
-            setValues({ ...values, content: event.target.value })
-          }
+          onChange={(event) => update('content', event.target.value)}
+          onBlur={() => markTouched('content')}
+          {...a11yProps('content', `${id}-counts`)}
         />
         <CharacterCounters
           id={`${id}-counts`}
           content={values.content}
           platforms={values.platforms}
         />
+        <FieldError id={errorId('content')} message={visibleError('content')} />
       </div>
 
-      <fieldset className="flex flex-col gap-2">
+      <fieldset
+        className="flex flex-col gap-2"
+        aria-describedby={
+          visibleError('platforms') ? errorId('platforms') : undefined
+        }
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget)) {
+            markTouched('platforms')
+          }
+        }}
+      >
         <legend className="mb-2 font-semibold">Platforms</legend>
         <div className="flex flex-wrap gap-2">
-          {PLATFORMS.map((platform) => {
+          {PLATFORMS.map((platform, index) => {
             const checked = values.platforms.includes(platform)
             return (
               <label
@@ -75,6 +125,7 @@ export function ComposerForm({ onCancel }: { onCancel: () => void }) {
                 )}
               >
                 <input
+                  id={index === 0 ? fieldId.platforms : undefined}
                   type="checkbox"
                   className="sr-only"
                   checked={checked}
@@ -92,43 +143,54 @@ export function ComposerForm({ onCancel }: { onCancel: () => void }) {
             )
           })}
         </div>
+        <FieldError
+          id={errorId('platforms')}
+          message={visibleError('platforms')}
+        />
       </fieldset>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor={`${id}-media`} className="font-semibold">
+        <label htmlFor={fieldId.mediaUrl} className="font-semibold">
           Image URL <span className="font-normal text-muted">(optional)</span>
         </label>
         <input
-          id={`${id}-media`}
+          id={fieldId.mediaUrl}
           type="url"
           inputMode="url"
-          className="input"
+          className="input aria-invalid:border-danger"
           placeholder="https://example.com/image.jpg"
           value={values.mediaUrl}
-          onChange={(event) =>
-            setValues({ ...values, mediaUrl: event.target.value })
-          }
+          onChange={(event) => update('mediaUrl', event.target.value)}
+          onBlur={() => markTouched('mediaUrl')}
+          {...a11yProps('mediaUrl')}
+        />
+        <FieldError
+          id={errorId('mediaUrl')}
+          message={visibleError('mediaUrl')}
         />
         {isHttpUrl(mediaUrl) && <ImagePreview key={mediaUrl} url={mediaUrl} />}
       </div>
 
       <div className="flex flex-col gap-2">
-        <label htmlFor={`${id}-time`} className="font-semibold">
+        <label htmlFor={fieldId.scheduledAt} className="font-semibold">
           Schedule for
         </label>
         <input
-          id={`${id}-time`}
+          id={fieldId.scheduledAt}
           type="datetime-local"
-          className="input"
-          aria-describedby={`${id}-time-hint`}
+          className="input aria-invalid:border-danger"
           value={values.scheduledAt}
-          onChange={(event) =>
-            setValues({ ...values, scheduledAt: event.target.value })
-          }
+          onChange={(event) => update('scheduledAt', event.target.value)}
+          onBlur={() => markTouched('scheduledAt')}
+          {...a11yProps('scheduledAt', `${id}-time-hint`)}
         />
         <p id={`${id}-time-hint`} className="text-body-sm text-muted">
           In your time zone ({getLocalTimeZone()})
         </p>
+        <FieldError
+          id={errorId('scheduledAt')}
+          message={visibleError('scheduledAt')}
+        />
       </div>
 
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
@@ -139,11 +201,20 @@ export function ComposerForm({ onCancel }: { onCancel: () => void }) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn-primary px-8" disabled>
+        <button type="submit" className="btn-primary px-8">
           Schedule post
         </button>
       </div>
     </form>
+  )
+}
+
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null
+  return (
+    <p id={id} className="text-body-sm font-semibold text-danger">
+      {message}
+    </p>
   )
 }
 

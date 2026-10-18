@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useId, useState, type FormEvent } from 'react'
+import { useId, useState, type FocusEvent, type FormEvent } from 'react'
 import { PlatformIcon } from '@/components/PlatformIcon'
 import { toggleValue } from '@/lib/arrays'
 import { getLocalTimeZone, toLocalInputValue } from '@/lib/dates'
@@ -56,6 +56,12 @@ export function ComposerForm({
     field: K,
     value: ComposerValues[K],
   ) => setValues((current) => ({ ...current, [field]: value }))
+
+  // Leaving the group (not moving between its checkboxes) marks it touched.
+  const handlePlatformBlur = (event: FocusEvent<HTMLInputElement>) => {
+    const group = event.currentTarget.closest('fieldset')
+    if (!group?.contains(event.relatedTarget)) markTouched('platforms')
+  }
 
   const togglePlatform = (platform: Platform) =>
     setValues((current) => ({
@@ -121,11 +127,6 @@ export function ComposerForm({
         aria-describedby={
           visibleError('platforms') ? errorId('platforms') : undefined
         }
-        onBlur={(event) => {
-          if (!event.currentTarget.contains(event.relatedTarget)) {
-            markTouched('platforms')
-          }
-        }}
       >
         <legend className="mb-2 font-semibold">Platforms</legend>
         <div className="flex flex-wrap gap-2">
@@ -145,6 +146,7 @@ export function ComposerForm({
                   className="sr-only"
                   checked={checked}
                   onChange={() => togglePlatform(platform)}
+                  onBlur={handlePlatformBlur}
                 />
                 <span aria-hidden="true">
                   <PlatformIcon
@@ -220,11 +222,7 @@ export function ComposerForm({
 
       {/* Stays visible on long posts; negative margins span the modal padding. */}
       <div className="sticky bottom-0 -mx-4 -mb-4 flex flex-col-reverse gap-3 border-t border-hairline bg-canvas px-4 py-3 sm:-mx-6 sm:-mb-6 sm:flex-row sm:justify-end sm:px-6">
-        <button
-          type="button"
-          className="btn min-h-11 rounded-cta border border-hairline px-6 hover:border-ink"
-          onClick={onCancel}
-        >
+        <button type="button" className="btn-secondary" onClick={onCancel}>
           Cancel
         </button>
         <button
@@ -262,7 +260,7 @@ function ImagePreview({ url }: { url: string }) {
   return (
     <img
       src={url}
-      alt="Preview of the attached image"
+      alt="Attachment preview"
       onError={() => setFailed(true)}
       className="max-h-48 w-fit rounded-sm border border-hairline object-cover"
     />

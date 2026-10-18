@@ -86,9 +86,9 @@ export function PostQueue({
   return (
     <div className="flex flex-col gap-8">
       {hasActiveFilters(filters) && (
-        <p role="status" className="text-body-sm text-muted">
+        <output className="block text-body-sm text-muted">
           Showing {visiblePosts.length} of {posts.length} posts
-        </p>
+        </output>
       )}
       {groupPostsByDay(visiblePosts).map((group) => (
         <section key={group.key} aria-labelledby={`day-${group.key}`}>

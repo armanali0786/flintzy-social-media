@@ -32,6 +32,8 @@ export function PlatformIcon({
 
   return (
     <svg
+      // An inline <svg> needs role="img" to be announced with its label.
+      // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="img"
       aria-label={label}
       viewBox="0 0 24 24"

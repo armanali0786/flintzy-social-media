@@ -48,6 +48,9 @@
   --text-heading-4: 32px;
   --text-heading-4--line-height: 1.25;
   --text-heading-4--font-weight: 600;
+  --text-heading-5: 24px;
+  --text-heading-5--line-height: 1.3;
+  --text-heading-5--font-weight: 700;
   --text-body-lg: 18px;
   --text-body-lg--line-height: 1.6;
   --text-body-lg--font-weight: 300;
@@ -128,6 +131,11 @@
 /* Signature mint pill — the one accent action per screen */
 @utility btn-green {
   @apply btn min-h-11 rounded-pill border border-ink bg-primary px-12 py-3 text-on-primary hover:opacity-85;
+}
+
+/* Outlined pill — secondary action next to a primary one (e.g. Cancel) */
+@utility btn-secondary {
+  @apply btn min-h-11 rounded-cta border border-hairline bg-canvas px-6 py-3 text-ink hover:border-ink;
 }
 
 /* Squarer black utility button */

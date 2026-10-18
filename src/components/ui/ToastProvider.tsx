@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { useCallback, useRef, useState, type ReactNode } from 'react'
+import { CloseIcon } from './CloseIcon'
 import { ToastContext, type ToastOptions, type ToastTone } from './useToast'
 
 export const TOAST_DURATION_MS = 5000
@@ -53,7 +54,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               className="btn size-7 rounded-full hover:bg-on-dark/15"
               onClick={() => dismiss(toast.id)}
             >
-              ✕
+              <CloseIcon className="size-3.5" />
             </button>
           </div>
         ))}

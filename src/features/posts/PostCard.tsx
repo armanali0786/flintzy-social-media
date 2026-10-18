@@ -22,9 +22,7 @@ export function PostCard({ post }: { post: Post }) {
           </time>
           <StatusBadge status={post.status} />
           {isRetrying && (
-            <span role="status" className="text-caption text-muted">
-              Confirming…
-            </span>
+            <output className="text-caption text-muted">Confirming…</output>
           )}
           <ul
             aria-label="Platforms"

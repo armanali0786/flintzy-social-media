@@ -56,11 +56,11 @@ describe('post composer', () => {
     const input = form.getByLabelText(/Image URL/)
 
     await user.type(input, 'not a url')
-    expect(form.queryByAltText('Preview of the attached image')).toBeNull()
+    expect(form.queryByAltText('Attachment preview')).toBeNull()
 
     await user.clear(input)
     await user.type(input, 'https://picsum.photos/200')
-    expect(form.getByAltText('Preview of the attached image')).toHaveAttribute(
+    expect(form.getByAltText('Attachment preview')).toHaveAttribute(
       'src',
       'https://picsum.photos/200',
     )
@@ -74,7 +74,7 @@ describe('post composer', () => {
       form.getByLabelText(/Image URL/),
       'https://bad.example/x.png',
     )
-    fireEvent.error(form.getByAltText('Preview of the attached image'))
+    fireEvent.error(form.getByAltText('Attachment preview'))
 
     expect(
       form.getByText("Couldn't load a preview for this image."),

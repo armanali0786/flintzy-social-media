@@ -27,17 +27,17 @@ npm install
 npm run dev        # http://localhost:5173
 ```
 
-| Script                  | What it does                    |
-| ----------------------- | ------------------------------- |
-| `npm run dev`           | Start the dev server            |
-| `npm run build`         | Type-check and build to `dist/` |
-| `npm run preview`       | Serve the production build      |
-| `npm test`              | Run all tests once              |
-| `npm run test:watch`    | Run tests in watch mode         |
-| `npm run test:coverage` | Tests with a coverage report    |
-| `npm run typecheck`     | TypeScript only                 |
-| `npm run lint`          | Lint with oxlint                |
-| `npm run format`        | Format with Prettier            |
+| Script                  | What it does                      |
+| ----------------------- | --------------------------------- |
+| `npm run dev`           | Start the dev server              |
+| `npm run build`         | Type-check and build to `dist/`   |
+| `npm run preview`       | Serve the production build        |
+| `npm test`              | Run all tests once                |
+| `npm run test:watch`    | Run tests in watch mode           |
+| `npm run test:coverage` | Tests with a coverage report      |
+| `npm run typecheck`     | TypeScript only                   |
+| `npm run lint`          | Lint with oxlint (incl. jsx-a11y) |
+| `npm run format`        | Format with Prettier              |
 
 ## Trying the harder cases
 
@@ -74,8 +74,9 @@ Business rules live in plain functions (`lib/`, `filterParams.ts`, `composerValu
 - **Filters live in the URL.** The URL is the single source of truth. Updates replace the history entry instead of adding one, and search is debounced by 300 ms.
 - **Local time → UTC without surprises.** The `datetime-local` value is parsed from its parts as local time, never via `new Date(string)`. Impossible dates (e.g. 30 Feb) and times skipped by a daylight-saving change are rejected instead of silently rolling over.
 - **Character counting by graphemes.** `Intl.Segmenter` counts what a person sees as one character, so 👍🏽 and 👨‍👩‍👧 count as 1. `string.length` would count 4 and 8.
+- **One design system.** Colours, the type scale (Titillium Web for headings, Inter for body), radii, shadows and the button, chip, card and input styles are Tailwind v4 theme tokens and utilities in `styles/index.css`. Components use only those tokens.
 - **Native `<dialog>` for the composer.** `showModal()` provides the focus trap, Escape to close, an inert background and focus return without custom code.
-- **Accessibility.** Labelled controls, toggle chips with `aria-pressed`, errors linked to fields with `aria-describedby`, a skip link, visible focus rings and WCAG AA colour contrast. Keyboard navigation was checked in Chrome.
+- **Accessibility.** Native semantics first (`fieldset`/`legend`, `<output>` for status text, `<time>`), labelled controls, toggle chips with `aria-pressed`, errors linked to fields with `aria-describedby`, a skip link, visible focus rings and WCAG AA colour contrast, partly enforced by oxlint's jsx-a11y rules. Keyboard navigation was checked in Chrome.
 
 ## Assumptions
 
@@ -88,11 +89,13 @@ Business rules live in plain functions (`lib/`, `filterParams.ts`, `composerValu
 
 ## Testing
 
-155 tests with Vitest and Testing Library. Statement coverage is about 99%.
+157 tests with Vitest and Testing Library. Statement coverage is about 99%.
 
 - Unit tests for date grouping and UTC conversion, character counting, validation, URL filter parsing and the mock API.
 - Component and integration tests for the queue, filters, composer and retry, including rollback and concurrent retries.
 - An end-to-end journey against the real mock API: filter failed posts, retry one, schedule a post for tomorrow, find it by search.
+
+GitHub Actions runs type-checking, lint, formatting, tests and the build on every push to `main` (see `.github/workflows/ci.yml`).
 
 Tests run with the time zone fixed to `Asia/Kolkata` (UTC+5:30), so any accidental UTC/local mix-up fails visibly. The suite also passes with the system clock set to UTC and to America/Los_Angeles.
 

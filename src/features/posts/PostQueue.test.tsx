@@ -111,6 +111,8 @@ describe('PostQueue', () => {
     vi.spyOn(postsApi, 'getPosts').mockReturnValue(new Promise(() => {}))
     renderQueue()
 
-    expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true')
+    const status = screen.getByRole('status')
+    expect(status).toHaveTextContent('Loading posts…')
+    expect(status.closest('[aria-busy]')).toHaveAttribute('aria-busy', 'true')
   })
 })

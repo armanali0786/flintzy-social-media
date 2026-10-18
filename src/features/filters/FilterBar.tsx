@@ -96,19 +96,12 @@ function ChipGroup({
   children: ReactNode
 }) {
   return (
-    <div
-      role="group"
-      aria-label={label}
-      className="flex flex-wrap items-center gap-2"
-    >
-      <span
-        aria-hidden="true"
-        className="w-full text-caption text-muted sm:w-16"
-      >
+    <fieldset className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      <legend className="mb-2 text-caption text-muted sm:float-left sm:mb-0 sm:w-16">
         {label}
-      </span>
-      {children}
-    </div>
+      </legend>
+      <div className="flex flex-wrap gap-2">{children}</div>
+    </fieldset>
   )
 }
 

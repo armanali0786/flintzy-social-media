@@ -1,7 +1,7 @@
 export function QueueSkeleton() {
   return (
-    <div role="status" aria-busy="true" className="flex flex-col gap-3">
-      <span className="sr-only">Loading posts…</span>
+    <div aria-busy="true" className="flex flex-col gap-3">
+      <output className="sr-only">Loading posts…</output>
       <div
         aria-hidden="true"
         className="mb-2 h-6 w-28 rounded-sm bg-hairline motion-safe:animate-pulse"

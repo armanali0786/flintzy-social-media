@@ -1,4 +1,5 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
+import { renderWithProviders } from '@/test/renderWithProviders'
 import type { Post } from '@/types/post'
 import { PostCard } from './PostCard'
 
@@ -13,7 +14,7 @@ const post: Post = {
 
 describe('PostCard', () => {
   it('shows content, local time, status and platforms', () => {
-    render(<PostCard post={post} />)
+    renderWithProviders(<PostCard post={post} />)
 
     expect(screen.getByText('Autumn blend is back')).toBeInTheDocument()
     expect(screen.getByText('9:30 AM')).toHaveAttribute(
@@ -30,12 +31,12 @@ describe('PostCard', () => {
   })
 
   it('shows the attached image when there is one', () => {
-    const { container } = render(<PostCard post={post} />)
+    const { container } = renderWithProviders(<PostCard post={post} />)
     expect(container.querySelector('img')).toHaveAttribute('src', post.mediaUrl)
   })
 
   it('shows the error message for failed posts', () => {
-    render(
+    renderWithProviders(
       <PostCard
         post={{ ...post, status: 'failed', errorMessage: 'Token expired' }}
       />,

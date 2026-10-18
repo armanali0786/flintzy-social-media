@@ -92,7 +92,7 @@ describe('postsApi', () => {
         random: () => 0.19,
       })
       const retried = expect(api.retryPost('post-1')).rejects.toThrow(
-        /Retry failed/,
+        "The platform didn't respond. Try again.",
       )
       await vi.advanceTimersByTimeAsync(RETRY_DELAY_MS)
       await retried

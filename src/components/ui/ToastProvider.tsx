@@ -30,9 +30,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={showToast}>
       {children}
+      {/* Top on mobile and bottom-right on larger screens, so toasts never
+          cover the centred post list and its Retry buttons. */}
       <div
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4"
+        className="pointer-events-none fixed inset-x-0 top-4 z-50 flex flex-col items-center gap-2 px-4 sm:top-auto sm:bottom-4 sm:left-auto sm:items-end"
       >
         {toasts.map((toast) => (
           <div

@@ -22,7 +22,7 @@ function wait(ms: number) {
 export function createPostsApi({
   initialPosts,
   latencyMs = 600,
-  random = Math.random,
+  random = () => Math.random(),
 }: PostsApiOptions) {
   let posts = initialPosts
 
@@ -54,7 +54,7 @@ export function createPostsApi({
         throw new Error('Only failed posts can be retried.')
       }
       if (random() < RETRY_FAILURE_RATE) {
-        throw new Error("Retry failed: the platform didn't respond. Try again.")
+        throw new Error("The platform didn't respond. Try again.")
       }
 
       const updated: Post = {

@@ -1,9 +1,17 @@
+import { useIsMutating } from '@tanstack/react-query'
+import { useId } from 'react'
 import { PlatformIcon } from '@/components/PlatformIcon'
 import { formatLocalTime } from '@/lib/dates'
 import type { Post } from '@/types/post'
+import { RetryButton } from './RetryButton'
 import { StatusBadge } from './StatusBadge'
+import { retryMutationKey } from './useRetryPost'
 
 export function PostCard({ post }: { post: Post }) {
+  const errorId = useId()
+  const isRetrying =
+    useIsMutating({ mutationKey: retryMutationKey(post.id) }) > 0
+
   return (
     <article className="card flex gap-4 p-4 sm:p-5">
       <div className="flex min-w-0 flex-1 flex-col gap-3">
@@ -12,6 +20,11 @@ export function PostCard({ post }: { post: Post }) {
             {formatLocalTime(post.scheduledAt)}
           </time>
           <StatusBadge status={post.status} />
+          {isRetrying && (
+            <span role="status" className="text-caption text-muted">
+              Confirming…
+            </span>
+          )}
           <ul
             aria-label="Platforms"
             className="ml-auto flex items-center gap-2"
@@ -28,10 +41,13 @@ export function PostCard({ post }: { post: Post }) {
           {post.content}
         </p>
 
-        {post.status === 'failed' && post.errorMessage && (
-          <p className="rounded-sm bg-danger-soft px-3 py-2 text-body-sm text-danger">
-            {post.errorMessage}
-          </p>
+        {post.status === 'failed' && (
+          <div className="flex flex-col gap-3 rounded-sm bg-danger-soft p-3 sm:flex-row sm:items-center">
+            <p id={errorId} className="flex-1 text-body-sm text-danger">
+              {post.errorMessage ?? 'This post failed to publish.'}
+            </p>
+            <RetryButton postId={post.id} describedBy={errorId} />
+          </div>
         )}
       </div>
 

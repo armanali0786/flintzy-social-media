@@ -1,5 +1,11 @@
 import type { Post } from '@/types/post'
-import { formatDayLabel, formatLocalTime, groupPostsByDay } from './dates'
+import {
+  formatDayLabel,
+  formatLocalTime,
+  groupPostsByDay,
+  parseLocalDateTime,
+  toLocalInputValue,
+} from './dates'
 
 // Tests run in Asia/Kolkata (UTC+5:30), configured in vite.config.ts.
 const now = new Date('2026-10-16T06:30:00.000Z') // Fri 16 Oct, 12:00 local
@@ -74,5 +80,52 @@ describe('groupPostsByDay', () => {
     groupPostsByDay(posts, now)
 
     expect(posts.map((p) => p.id)).toEqual(['b', 'a'])
+  })
+})
+
+describe('parseLocalDateTime', () => {
+  it('reads datetime-local values as local time and converts to UTC', () => {
+    expect(parseLocalDateTime('2026-10-20T09:30')?.toISOString()).toBe(
+      '2026-10-20T04:00:00.000Z',
+    )
+    expect(parseLocalDateTime('2026-10-20T09:30:15')?.toISOString()).toBe(
+      '2026-10-20T04:00:15.000Z',
+    )
+  })
+
+  it('handles local times that fall on the previous UTC day', () => {
+    expect(parseLocalDateTime('2026-10-21T03:00')?.toISOString()).toBe(
+      '2026-10-20T21:30:00.000Z',
+    )
+  })
+
+  it.each([
+    '',
+    'not a date',
+    '2026-10-20',
+    '2026-10-20 09:30',
+    '2026-10-20T09:30Z',
+    '2026-02-30T10:00',
+    '2026-13-01T10:00',
+    '2026-10-20T24:00',
+    '2026-10-20T09:60',
+  ])('rejects %j', (value) => {
+    expect(parseLocalDateTime(value)).toBeNull()
+  })
+})
+
+describe('toLocalInputValue', () => {
+  it('formats a date for a datetime-local input in local time', () => {
+    expect(toLocalInputValue(new Date('2026-10-20T04:00:00.000Z'))).toBe(
+      '2026-10-20T09:30',
+    )
+  })
+
+  it('round-trips with parseLocalDateTime', () => {
+    expect(
+      parseLocalDateTime(
+        toLocalInputValue(new Date('2026-12-31T20:15:00.000Z')),
+      )?.toISOString(),
+    ).toBe('2026-12-31T20:15:00.000Z')
   })
 })

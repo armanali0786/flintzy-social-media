@@ -44,3 +44,35 @@ export function groupPostsByDay(posts: Post[], now = new Date()): DayGroup[] {
 export function getLocalTimeZone(): string {
   return Intl.DateTimeFormat().resolvedOptions().timeZone
 }
+
+const LOCAL_DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?$/
+
+/**
+ * Parses a datetime-local value such as "2026-10-20T09:30" as local time.
+ * Built from its parts rather than `new Date(string)` so the result never
+ * depends on how the engine interprets a zone-less string. Returns null for
+ * malformed or impossible values (e.g. 30 Feb, or a time skipped by a
+ * daylight-saving change), which `Date` would otherwise silently roll over.
+ */
+export function parseLocalDateTime(value: string): Date | null {
+  const match = LOCAL_DATE_TIME.exec(value)
+  if (!match) return null
+
+  const [year, month, day, hours, minutes, seconds] = match
+    .slice(1)
+    .map((part) => Number(part ?? 0))
+  const date = new Date(year, month - 1, day, hours, minutes, seconds)
+
+  const roundTrips =
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day &&
+    date.getHours() === hours &&
+    date.getMinutes() === minutes
+  return roundTrips ? date : null
+}
+
+/** Formats a date as a datetime-local value, e.g. for the input's `min`. */
+export function toLocalInputValue(date: Date): string {
+  return format(date, "yyyy-MM-dd'T'HH:mm")
+}

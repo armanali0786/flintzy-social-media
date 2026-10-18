@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useId, useState, type FormEvent } from 'react'
 import { PlatformIcon } from '@/components/PlatformIcon'
 import { toggleValue } from '@/lib/arrays'
-import { getLocalTimeZone } from '@/lib/dates'
+import { getLocalTimeZone, toLocalInputValue } from '@/lib/dates'
 import { PLATFORM_CONFIG } from '@/lib/platforms'
 import { isHttpUrl } from '@/lib/url'
 import { PLATFORMS, type Platform } from '@/types/post'
@@ -18,15 +18,25 @@ import {
 interface ComposerFormProps {
   onSubmit: (values: ComposerValues) => void
   onCancel: () => void
+  isSubmitting?: boolean
+  submitError?: string
 }
 
-export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
+export function ComposerForm({
+  onSubmit,
+  onCancel,
+  isSubmitting = false,
+  submitError,
+}: ComposerFormProps) {
   const [values, setValues] = useState(INITIAL_VALUES)
   const [touched, setTouched] = useState<ReadonlySet<ComposerField>>(new Set())
   const [submitAttempted, setSubmitAttempted] = useState(false)
+  // Time used for the "must be in the future" rule. Fixed during render to
+  // keep it pure, and refreshed on every submit attempt.
+  const [checkedAt, setCheckedAt] = useState(() => new Date())
   const id = useId()
 
-  const errors = validateComposer(values)
+  const errors = validateComposer(values, checkedAt)
   const mediaUrl = values.mediaUrl.trim()
 
   const fieldId: Record<ComposerField, string> = {
@@ -55,7 +65,12 @@ export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const firstInvalid = COMPOSER_FIELDS.find((field) => errors[field])
+    if (isSubmitting) return
+
+    const now = new Date()
+    setCheckedAt(now)
+    const submitErrors = validateComposer(values, now)
+    const firstInvalid = COMPOSER_FIELDS.find((field) => submitErrors[field])
 
     if (firstInvalid) {
       setSubmitAttempted(true)
@@ -179,6 +194,7 @@ export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
           id={fieldId.scheduledAt}
           type="datetime-local"
           className="input aria-invalid:border-danger"
+          min={toLocalInputValue(checkedAt)}
           value={values.scheduledAt}
           onChange={(event) => update('scheduledAt', event.target.value)}
           onBlur={() => markTouched('scheduledAt')}
@@ -193,6 +209,15 @@ export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
         />
       </div>
 
+      {submitError && (
+        <p
+          role="alert"
+          className="rounded-sm bg-danger-soft px-3 py-2 text-body-sm text-danger"
+        >
+          {submitError}
+        </p>
+      )}
+
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button
           type="button"
@@ -201,8 +226,12 @@ export function ComposerForm({ onSubmit, onCancel }: ComposerFormProps) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn-primary px-8">
-          Schedule post
+        <button
+          type="submit"
+          className="btn-primary px-8"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Scheduling…' : 'Schedule post'}
         </button>
       </div>
     </form>

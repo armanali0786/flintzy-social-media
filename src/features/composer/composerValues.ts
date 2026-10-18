@@ -1,4 +1,6 @@
+import type { NewPost } from '@/api/postsApi'
 import { getCharacterCounts } from '@/lib/characterCount'
+import { parseLocalDateTime } from '@/lib/dates'
 import { PLATFORM_CONFIG } from '@/lib/platforms'
 import { isHttpUrl } from '@/lib/url'
 import type { Platform } from '@/types/post'
@@ -37,7 +39,19 @@ function validateContent({ content, platforms }: ComposerValues) {
     : undefined
 }
 
-export function validateComposer(values: ComposerValues): ComposerErrors {
+function validateScheduledAt(value: string, now: Date) {
+  if (value === '') return 'Choose a date and time.'
+
+  const date = parseLocalDateTime(value)
+  if (!date) return 'Enter a valid date and time.'
+  if (date.getTime() <= now.getTime()) return 'Choose a time in the future.'
+  return undefined
+}
+
+export function validateComposer(
+  values: ComposerValues,
+  now = new Date(),
+): ComposerErrors {
   const mediaUrl = values.mediaUrl.trim()
   return {
     content: validateContent(values),
@@ -49,8 +63,7 @@ export function validateComposer(values: ComposerValues): ComposerErrors {
       mediaUrl !== '' && !isHttpUrl(mediaUrl)
         ? 'Enter a valid image URL (starting with http:// or https://).'
         : undefined,
-    scheduledAt:
-      values.scheduledAt === '' ? 'Choose a date and time.' : undefined,
+    scheduledAt: validateScheduledAt(values.scheduledAt, now),
   }
 }
 
@@ -61,3 +74,19 @@ export const COMPOSER_FIELDS: ComposerField[] = [
   'mediaUrl',
   'scheduledAt',
 ]
+
+/** Converts validated form values into the API payload, storing time in UTC. */
+export function toNewPost(values: ComposerValues): NewPost {
+  const scheduledAt = parseLocalDateTime(values.scheduledAt)
+  if (!scheduledAt) {
+    throw new Error('toNewPost requires a validated scheduledAt')
+  }
+
+  const mediaUrl = values.mediaUrl.trim()
+  return {
+    content: values.content.trim(),
+    platforms: values.platforms,
+    mediaUrl: mediaUrl || undefined,
+    scheduledAt: scheduledAt.toISOString(),
+  }
+}

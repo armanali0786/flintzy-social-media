@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Modal } from '@/components/ui/Modal'
-import { ComposerForm } from '@/features/composer/ComposerForm'
+import { NewPostDialog } from '@/features/composer/NewPostDialog'
 import { FilterBar } from '@/features/filters/FilterBar'
 import { usePostFilters } from '@/features/filters/usePostFilters'
 import { PostQueue } from '@/features/posts/PostQueue'
@@ -16,7 +15,6 @@ export function App() {
     clearFilters,
   } = usePostFilters()
   const [composerOpen, setComposerOpen] = useState(false)
-  const closeComposer = () => setComposerOpen(false)
 
   return (
     <div className="min-h-dvh">
@@ -56,10 +54,10 @@ export function App() {
         <PostQueue filters={filters} onClearFilters={clearFilters} />
       </main>
 
-      <Modal open={composerOpen} title="New post" onClose={closeComposer}>
-        {/* Saving the post is added in the next phase. */}
-        <ComposerForm onSubmit={() => {}} onCancel={closeComposer} />
-      </Modal>
+      <NewPostDialog
+        open={composerOpen}
+        onClose={() => setComposerOpen(false)}
+      />
     </div>
   )
 }

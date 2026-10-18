@@ -1,4 +1,5 @@
 import { screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { postsApi } from '@/api/postsApi'
 import { renderWithProviders } from '@/test/renderWithProviders'
 import { App } from './App'
@@ -21,4 +22,15 @@ test('offers a skip link to the post queue', () => {
   const target = document.querySelector(link.getAttribute('href')!)
   expect(target).toHaveTextContent('Post queue')
   expect(target).toHaveAttribute('tabindex', '-1')
+})
+
+test('opens the composer from the empty queue', async () => {
+  vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
+  renderWithProviders(<App />)
+
+  await userEvent.click(
+    await screen.findByRole('button', { name: 'Create a post' }),
+  )
+
+  expect(screen.getByRole('dialog', { name: 'New post' })).toBeInTheDocument()
 })

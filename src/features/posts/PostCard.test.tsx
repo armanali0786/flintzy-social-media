@@ -53,4 +53,16 @@ describe('PostCard', () => {
 
     expect(container.querySelector('img')).toBeNull()
   })
+
+  it('explains a failure even without an error message', () => {
+    renderWithProviders(
+      <PostCard
+        post={{ ...post, status: 'failed', errorMessage: undefined }}
+      />,
+    )
+
+    expect(
+      screen.getByRole('button', { name: 'Retry' }),
+    ).toHaveAccessibleDescription('This post failed to publish.')
+  })
 })

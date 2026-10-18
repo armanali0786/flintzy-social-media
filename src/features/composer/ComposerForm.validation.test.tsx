@@ -167,4 +167,15 @@ describe('composer validation', () => {
     renderForm({ submitError: 'Something went wrong.' })
     expect(screen.getByRole('alert')).toHaveTextContent('Something went wrong.')
   })
+
+  it('asks for a date and time after leaving the field empty', async () => {
+    const { user } = renderForm()
+
+    await user.click(screen.getByLabelText('Schedule for'))
+    await user.tab()
+
+    expect(screen.getByLabelText('Schedule for')).toHaveAccessibleDescription(
+      /Choose a date and time\./,
+    )
+  })
 })

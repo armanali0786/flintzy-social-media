@@ -14,7 +14,7 @@ import {
   type PostFilters,
 } from './filterParams'
 
-export const SEARCH_DEBOUNCE_MS = 300
+const SEARCH_DEBOUNCE_MS = 300
 
 export function usePostFilters() {
   const [searchParams, setSearchParams] = useSearchParams()

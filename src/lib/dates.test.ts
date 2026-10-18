@@ -39,7 +39,7 @@ describe('groupPostsByDay', () => {
     expect(groupPostsByDay([], now)).toEqual([])
   })
 
-  it('groups chronologically into Today, Tomorrow, then dates', () => {
+  it('lists Today, Tomorrow and later dates first, then past days', () => {
     const posts = [
       post('sun', '2026-10-18T04:00:00.000Z'),
       post('today-late', '2026-10-16T12:00:00.000Z'),
@@ -51,11 +51,37 @@ describe('groupPostsByDay', () => {
     const groups = groupPostsByDay(posts, now)
 
     expect(groups.map((g) => [g.label, g.posts.map((p) => p.id)])).toEqual([
-      ['Thu, 15 Oct', ['yesterday']],
       ['Today', ['today-early', 'today-late']],
       ['Tomorrow', ['tomorrow']],
       ['Sun, 18 Oct', ['sun']],
+      ['Thu, 15 Oct', ['yesterday']],
     ])
+  })
+
+  it('lists past days most recent first', () => {
+    const posts = [
+      post('oct-13', '2026-10-13T05:00:00.000Z'),
+      post('oct-15', '2026-10-15T05:00:00.000Z'),
+      post('oct-14', '2026-10-14T05:00:00.000Z'),
+    ]
+
+    expect(groupPostsByDay(posts, now).map((g) => g.label)).toEqual([
+      'Thu, 15 Oct',
+      'Wed, 14 Oct',
+      'Tue, 13 Oct',
+    ])
+  })
+
+  it('keeps posts from earlier today in the Today group', () => {
+    const posts = [
+      post('later', '2026-10-16T10:00:00.000Z'),
+      post('this-morning', '2026-10-16T02:00:00.000Z'), // 07:30 local, already past
+    ]
+
+    const [today] = groupPostsByDay(posts, now)
+
+    expect(today.label).toBe('Today')
+    expect(today.posts.map((p) => p.id)).toEqual(['this-morning', 'later'])
   })
 
   it('splits days at local midnight, not UTC midnight', () => {

@@ -19,7 +19,11 @@ export function formatLocalTime(isoString: string): string {
   return format(new Date(isoString), 'h:mm a')
 }
 
-/** Groups posts by the viewer's local calendar day, in chronological order. */
+/**
+ * Groups posts by the viewer's local calendar day: Today, Tomorrow and later
+ * days first (oldest to newest), then past days (most recent first). Posts
+ * within a day are sorted by time.
+ */
 export function groupPostsByDay(posts: Post[], now = new Date()): DayGroup[] {
   const sorted = [...posts].sort(
     (a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt),
@@ -38,7 +42,10 @@ export function groupPostsByDay(posts: Post[], now = new Date()): DayGroup[] {
     }
   }
 
-  return groups
+  const todayKey = format(now, 'yyyy-MM-dd')
+  const upcoming = groups.filter((group) => group.key >= todayKey)
+  const past = groups.filter((group) => group.key < todayKey).reverse()
+  return [...upcoming, ...past]
 }
 
 export function getLocalTimeZone(): string {

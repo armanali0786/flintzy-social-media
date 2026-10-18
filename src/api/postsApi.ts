@@ -7,7 +7,7 @@ export type NewPost = Pick<
 >
 
 export const RETRY_DELAY_MS = 1000
-export const RETRY_FAILURE_RATE = 0.2
+const RETRY_FAILURE_RATE = 0.2
 
 interface PostsApiOptions {
   initialPosts: Post[]
@@ -75,8 +75,6 @@ export function createPostsApi({
     },
   }
 }
-
-export type PostsApi = ReturnType<typeof createPostsApi>
 
 // Opening the app with `?simulate=load-error` makes the first load fail, so
 // the error state can be demonstrated on the deployed site.

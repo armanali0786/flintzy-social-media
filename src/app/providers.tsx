@@ -4,7 +4,10 @@ import { BrowserRouter } from 'react-router'
 import { ToastProvider } from '@/components/ui/ToastProvider'
 
 export function AppProviders({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient())
+  // Automatic retries only delay the error state when the API is a local mock.
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+  )
 
   return (
     <BrowserRouter>

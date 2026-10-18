@@ -13,6 +13,8 @@ interface PostsApiOptions {
   initialPosts: Post[]
   latencyMs?: number
   random?: () => number
+  /** Number of initial getPosts calls that fail, to demo the error state */
+  failedLoads?: number
 }
 
 function wait(ms: number) {
@@ -23,12 +25,18 @@ export function createPostsApi({
   initialPosts,
   latencyMs = 600,
   random = () => Math.random(),
+  failedLoads = 0,
 }: PostsApiOptions) {
   let posts = initialPosts
+  let failedLoadsLeft = failedLoads
 
   return {
     async getPosts(): Promise<Post[]> {
       await wait(latencyMs)
+      if (failedLoadsLeft > 0) {
+        failedLoadsLeft--
+        throw new Error("Couldn't reach the server.")
+      }
       return [...posts]
     },
 
@@ -70,4 +78,12 @@ export function createPostsApi({
 
 export type PostsApi = ReturnType<typeof createPostsApi>
 
-export const postsApi = createPostsApi({ initialPosts: loadMockPosts() })
+// Opening the app with `?simulate=load-error` makes the first load fail, so
+// the error state can be demonstrated on the deployed site.
+const simulateLoadError =
+  new URLSearchParams(window.location.search).get('simulate') === 'load-error'
+
+export const postsApi = createPostsApi({
+  initialPosts: loadMockPosts(),
+  failedLoads: simulateLoadError ? 1 : 0,
+})

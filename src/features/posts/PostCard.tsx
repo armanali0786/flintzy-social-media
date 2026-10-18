@@ -1,5 +1,5 @@
 import { useIsMutating } from '@tanstack/react-query'
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { PlatformIcon } from '@/components/PlatformIcon'
 import { formatLocalTime } from '@/lib/dates'
 import type { Post } from '@/types/post'
@@ -9,6 +9,7 @@ import { retryMutationKey } from './useRetryPost'
 
 export function PostCard({ post }: { post: Post }) {
   const errorId = useId()
+  const [imageFailed, setImageFailed] = useState(false)
   const isRetrying =
     useIsMutating({ mutationKey: retryMutationKey(post.id) }) > 0
 
@@ -51,11 +52,12 @@ export function PostCard({ post }: { post: Post }) {
         )}
       </div>
 
-      {post.mediaUrl && (
+      {post.mediaUrl && !imageFailed && (
         <img
           src={post.mediaUrl}
           alt=""
           loading="lazy"
+          onError={() => setImageFailed(true)}
           className="size-16 shrink-0 rounded-sm bg-surface-soft object-cover sm:size-24"
         />
       )}

@@ -144,4 +144,22 @@ describe('postsApi', () => {
       await retried
     })
   })
+
+  it('fails the configured number of initial loads, then recovers', async () => {
+    const api = createPostsApi({
+      initialPosts: [makePost()],
+      latencyMs: 0,
+      failedLoads: 1,
+    })
+
+    const first = expect(api.getPosts()).rejects.toThrow(
+      "Couldn't reach the server.",
+    )
+    await vi.advanceTimersByTimeAsync(0)
+    await first
+
+    const second = api.getPosts()
+    await vi.advanceTimersByTimeAsync(0)
+    await expect(second).resolves.toEqual([makePost()])
+  })
 })

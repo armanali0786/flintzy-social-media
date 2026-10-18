@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react'
+import { fireEvent, screen, within } from '@testing-library/react'
 import { renderWithProviders } from '@/test/renderWithProviders'
 import type { Post } from '@/types/post'
 import { PostCard } from './PostCard'
@@ -44,5 +44,13 @@ describe('PostCard', () => {
 
     expect(screen.getByText('Failed')).toBeInTheDocument()
     expect(screen.getByText('Token expired')).toBeInTheDocument()
+  })
+
+  it('hides the thumbnail if the image fails to load', () => {
+    const { container } = renderWithProviders(<PostCard post={post} />)
+
+    fireEvent.error(container.querySelector('img')!)
+
+    expect(container.querySelector('img')).toBeNull()
   })
 })

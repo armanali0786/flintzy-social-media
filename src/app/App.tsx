@@ -51,7 +51,11 @@ export function App() {
           onToggleStatus={toggleStatus}
           onClear={clearFilters}
         />
-        <PostQueue filters={filters} onClearFilters={clearFilters} />
+        <PostQueue
+          filters={filters}
+          onClearFilters={clearFilters}
+          onCreatePost={() => setComposerOpen(true)}
+        />
       </main>
 
       <NewPostDialog

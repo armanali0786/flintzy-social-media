@@ -3,52 +3,63 @@ import {
   hasActiveFilters,
   type PostFilters,
 } from '@/features/filters/filterParams'
+import { StatePanel } from '@/components/ui/StatePanel'
 import { groupPostsByDay } from '@/lib/dates'
 import { PostCard } from './PostCard'
+import { QueueSkeleton } from './QueueSkeleton'
 import { usePosts } from './usePosts'
 
 interface PostQueueProps {
   filters: PostFilters
   onClearFilters: () => void
+  onCreatePost: () => void
 }
 
-export function PostQueue({ filters, onClearFilters }: PostQueueProps) {
+export function PostQueue({
+  filters,
+  onClearFilters,
+  onCreatePost,
+}: PostQueueProps) {
   const { data: posts, isPending, isError, refetch } = usePosts()
 
   if (isPending) {
-    return (
-      <p role="status" className="card text-center text-muted">
-        Loading posts…
-      </p>
-    )
+    return <QueueSkeleton />
   }
 
   if (isError) {
     return (
-      <div
+      <StatePanel
         role="alert"
-        className="card flex flex-col items-center gap-4 text-center"
-      >
-        <p>We couldn't load your posts.</p>
-        <button
-          type="button"
-          className="btn-primary-sm"
-          onClick={() => void refetch()}
-        >
-          Try again
-        </button>
-      </div>
+        title="We couldn't load your posts"
+        description="Check your connection and try again."
+        action={
+          <button
+            type="button"
+            className="btn-primary-sm"
+            onClick={() => void refetch()}
+          >
+            Try again
+          </button>
+        }
+      />
     )
   }
 
   if (posts.length === 0) {
     return (
-      <div className="card text-center">
-        <p className="font-semibold">No posts yet</p>
-        <p className="text-body-sm text-muted">
-          Posts you schedule will appear here.
-        </p>
-      </div>
+      <StatePanel
+        title="No posts yet"
+        description="Posts you schedule will appear here."
+        action={
+          <button
+            type="button"
+            className="btn-primary-sm"
+            onClick={onCreatePost}
+          >
+            Create a post
+          </button>
+        }
+      />
     )
   }
 
@@ -56,21 +67,19 @@ export function PostQueue({ filters, onClearFilters }: PostQueueProps) {
 
   if (visiblePosts.length === 0) {
     return (
-      <div className="card flex flex-col items-center gap-4 text-center">
-        <div>
-          <p className="font-semibold">No posts match your filters</p>
-          <p className="text-body-sm text-muted">
-            Try a different search or remove some filters.
-          </p>
-        </div>
-        <button
-          type="button"
-          className="btn-primary-sm"
-          onClick={onClearFilters}
-        >
-          Clear filters
-        </button>
-      </div>
+      <StatePanel
+        title="No posts match your filters"
+        description="Try a different search or remove some filters."
+        action={
+          <button
+            type="button"
+            className="btn-primary-sm"
+            onClick={onClearFilters}
+          >
+            Clear filters
+          </button>
+        }
+      />
     )
   }
 

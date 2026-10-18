@@ -6,6 +6,14 @@ import { renderWithProviders } from '@/test/renderWithProviders'
 import type { Post } from '@/types/post'
 import { PostQueue } from './PostQueue'
 
+function deferred<T>() {
+  let resolve!: (value: T) => void
+  const promise = new Promise<T>((res) => {
+    resolve = res
+  })
+  return { promise, resolve }
+}
+
 function makePost(id: string, scheduledAt: string): Post {
   return {
     id,
@@ -14,6 +22,16 @@ function makePost(id: string, scheduledAt: string): Post {
     scheduledAt,
     status: 'scheduled',
   }
+}
+
+function renderQueue(props: { onCreatePost?: () => void } = {}) {
+  renderWithProviders(
+    <PostQueue
+      filters={EMPTY_FILTERS}
+      onClearFilters={() => {}}
+      onCreatePost={props.onCreatePost ?? (() => {})}
+    />,
+  )
 }
 
 describe('PostQueue', () => {
@@ -34,9 +52,7 @@ describe('PostQueue', () => {
       makePost('b', '2026-10-17T05:00:00.000Z'),
       makePost('a', '2026-10-16T09:00:00.000Z'),
     ])
-    renderWithProviders(
-      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
-    )
+    renderQueue()
 
     expect(screen.getByRole('status')).toHaveTextContent('Loading posts')
 
@@ -52,28 +68,49 @@ describe('PostQueue', () => {
 
   it('shows an empty state when there are no posts', async () => {
     vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
-    renderWithProviders(
-      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
-    )
+    renderQueue()
 
     expect(await screen.findByText('No posts yet')).toBeInTheDocument()
   })
 
   it('shows an error state and recovers on "Try again"', async () => {
+    const retry = deferred<Post[]>()
     vi.spyOn(postsApi, 'getPosts')
       .mockRejectedValueOnce(new Error('Network down'))
-      .mockResolvedValueOnce([makePost('a', '2026-10-16T09:00:00.000Z')])
-    renderWithProviders(
-      <PostQueue filters={EMPTY_FILTERS} onClearFilters={() => {}} />,
-    )
+      .mockReturnValueOnce(retry.promise)
+    renderQueue()
 
     const alert = await screen.findByRole('alert')
-    expect(alert).toHaveTextContent("We couldn't load your posts.")
+    expect(alert).toHaveTextContent("We couldn't load your posts")
+    expect(alert).toHaveTextContent('Check your connection and try again.')
 
     await userEvent.click(
       within(alert).getByRole('button', { name: 'Try again' }),
     )
+    // A query without data goes back to pending, so the skeleton returns.
+    expect(screen.getByRole('status')).toHaveTextContent('Loading posts…')
+    expect(screen.queryByRole('alert')).toBeNull()
 
+    retry.resolve([makePost('a', '2026-10-16T09:00:00.000Z')])
     expect(await screen.findByText('Post a')).toBeInTheDocument()
+  })
+
+  it('offers to create a post when the queue is empty', async () => {
+    vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
+    const onCreatePost = vi.fn()
+    renderQueue({ onCreatePost })
+
+    await userEvent.click(
+      await screen.findByRole('button', { name: 'Create a post' }),
+    )
+
+    expect(onCreatePost).toHaveBeenCalledOnce()
+  })
+
+  it('marks the loading skeleton as busy for assistive technology', () => {
+    vi.spyOn(postsApi, 'getPosts').mockReturnValue(new Promise(() => {}))
+    renderQueue()
+
+    expect(screen.getByRole('status')).toHaveAttribute('aria-busy', 'true')
   })
 })

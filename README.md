@@ -1,5 +1,7 @@
 # Flintzy Post Scheduler
 
+![Flintzy Scheduler: compose, schedule and manage posts for every channel](.github/assets/readme-banner.jpg)
+
 A social media post scheduler for Facebook, Instagram, X and TikTok, built for the Flintzy frontend assignment. Compose posts, schedule them, and manage the whole queue from one dashboard.
 
 **Live demo:** _link added after deployment_

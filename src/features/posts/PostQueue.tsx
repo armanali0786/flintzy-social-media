@@ -3,6 +3,7 @@ import {
   hasActiveFilters,
   type PostFilters,
 } from '@/features/filters/filterParams'
+import emptyStateIllustration from '@/assets/empty-state.webp'
 import { StatePanel } from '@/components/ui/StatePanel'
 import { groupPostsByDay } from '@/lib/dates'
 import { PostCard } from './PostCard'
@@ -49,6 +50,7 @@ export function PostQueue({
     return (
       <StatePanel
         title="No posts yet"
+        illustration={emptyStateIllustration}
         description="Posts you schedule will appear here."
         action={
           <button
@@ -69,6 +71,7 @@ export function PostQueue({
     return (
       <StatePanel
         title="No posts match your filters"
+        illustration={emptyStateIllustration}
         description="Try a different search or remove some filters."
         action={
           <button

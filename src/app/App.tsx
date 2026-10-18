@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import logoMark from '@/assets/logo-mark.png'
 import { NewPostDialog } from '@/features/composer/NewPostDialog'
 import { FilterBar } from '@/features/filters/FilterBar'
 import { usePostFilters } from '@/features/filters/usePostFilters'
@@ -27,9 +28,12 @@ export function App() {
       <header className="border-b border-hairline bg-canvas">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-2 p-4">
           <div className="flex min-w-0 items-center gap-2">
-            <span
-              aria-hidden="true"
-              className="size-5 shrink-0 rounded-full border border-ink bg-primary sm:size-6"
+            <img
+              src={logoMark}
+              alt=""
+              width={28}
+              height={28}
+              className="size-6 shrink-0 sm:size-7"
             />
             <h1 className="truncate text-body-lg font-bold sm:text-heading-5">
               Flintzy Scheduler

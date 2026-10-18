@@ -105,6 +105,9 @@ describe('PostQueue', () => {
     )
 
     expect(onCreatePost).toHaveBeenCalledOnce()
+    // The illustration is decorative, so it stays out of the accessibility tree.
+    expect(screen.queryByRole('img')).toBeNull()
+    expect(document.querySelector('img')).toHaveAttribute('alt', '')
   })
 
   it('marks the loading skeleton as busy for assistive technology', () => {

@@ -41,8 +41,17 @@ npm run dev        # http://localhost:5173
 | `npm run lint`          | Lint with oxlint (incl. jsx-a11y) |
 | `npm run format`        | Format with Prettier              |
 
+## Offline and installable
+
+The app is a Progressive Web App. A service worker precaches the app shell and caches fonts and post images as they load, so after the first visit it opens and works fully offline. The mock API runs in the browser, so you can still filter, schedule and retry posts with no connection. A banner appears while you're offline. In Chrome or Edge, use **Install** in the address bar to add it as an app; on iPhone, **Share → Add to Home Screen**.
+
+## Social sharing
+
+Shared links show a title, description and preview image on WhatsApp, LinkedIn, Facebook, Slack and X (Open Graph and Twitter Card tags in `index.html`). Most platforms require absolute image URLs, so the build fills in the site URL: on Vercel it is detected automatically from `VERCEL_PROJECT_PRODUCTION_URL`, and elsewhere you can set `VITE_SITE_URL=https://your-domain` before `npm run build`.
+
 ## Trying the harder cases
 
+- **Offline:** load the app once, then turn off your connection (or use DevTools → Network → Offline) and reload.
 - **Error state:** open the app with `?simulate=load-error`. The first load fails; "Try again" recovers.
 - **Retry:** filter by **Failed** and press **Retry**. Each attempt fails 20% of the time, so try a few posts to see both the success and the rollback.
 - **Character limits:** select X and Facebook, then paste more than 280 characters. The X counter turns red and scheduling is blocked, while Facebook stays within its limit.

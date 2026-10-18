@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import logoMark from '@/assets/logo-mark.png'
+import { OfflineBanner } from '@/components/OfflineBanner'
 import { NewPostDialog } from '@/features/composer/NewPostDialog'
 import { FilterBar } from '@/features/filters/FilterBar'
 import { usePostFilters } from '@/features/filters/usePostFilters'
@@ -48,6 +49,7 @@ export function App() {
           </button>
         </div>
       </header>
+      <OfflineBanner />
       <main className="mx-auto max-w-3xl p-4 sm:py-12">
         <div className="mb-6">
           <h2

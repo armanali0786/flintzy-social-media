@@ -101,7 +101,10 @@ function ChipGroup({
       aria-label={label}
       className="flex flex-wrap items-center gap-2"
     >
-      <span aria-hidden="true" className="w-16 text-caption text-muted">
+      <span
+        aria-hidden="true"
+        className="w-full text-caption text-muted sm:w-16"
+      >
         {label}
       </span>
       {children}

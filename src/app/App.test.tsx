@@ -12,3 +12,13 @@ test('renders the app heading and local time zone', () => {
   ).toBeInTheDocument()
   expect(screen.getByText(/Asia\/(Kolkata|Calcutta)/)).toBeInTheDocument()
 })
+
+test('offers a skip link to the post queue', () => {
+  vi.spyOn(postsApi, 'getPosts').mockResolvedValue([])
+  renderWithProviders(<App />)
+
+  const link = screen.getByRole('link', { name: 'Skip to post queue' })
+  const target = document.querySelector(link.getAttribute('href')!)
+  expect(target).toHaveTextContent('Post queue')
+  expect(target).toHaveAttribute('tabindex', '-1')
+})

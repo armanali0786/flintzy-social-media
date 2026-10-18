@@ -22,11 +22,12 @@
 
   /* Text */
   --color-ink: #000000;
-  --color-muted: #86909c;
+  /* Darkened from #86909c to meet WCAG AA (4.5:1) on every surface */
+  --color-muted: #667085;
   --color-on-dark: #ffffff;
 
   /* Functional — status/error states only, never brand chrome */
-  --color-danger: #d92d20;
+  --color-danger: #c9291d; /* 5:1 on danger-soft (was #d92d20, 4.4:1) */
   --color-danger-soft: #fef3f2;
 
   /* Type scale: size / line-height / letter-spacing / weight */

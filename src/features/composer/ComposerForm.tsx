@@ -218,7 +218,8 @@ export function ComposerForm({
         </p>
       )}
 
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      {/* Stays visible on long posts; negative margins span the modal padding. */}
+      <div className="sticky bottom-0 -mx-4 -mb-4 flex flex-col-reverse gap-3 border-t border-hairline bg-canvas px-4 py-3 sm:-mx-6 sm:-mb-6 sm:flex-row sm:justify-end sm:px-6">
         <button
           type="button"
           className="btn min-h-11 rounded-cta border border-hairline px-6 hover:border-ink"

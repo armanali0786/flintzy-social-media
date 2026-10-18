@@ -18,6 +18,12 @@ export function App() {
 
   return (
     <div className="min-h-dvh">
+      <a
+        href="#post-queue"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-sm focus:bg-ink focus:px-4 focus:py-2 focus:text-on-dark"
+      >
+        Skip to post queue
+      </a>
       <header className="border-b border-hairline bg-canvas">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 p-4">
           <div className="flex items-center gap-2">
@@ -38,7 +44,9 @@ export function App() {
       </header>
       <main className="mx-auto max-w-3xl p-4 sm:py-12">
         <div className="mb-6">
-          <h2 className="text-heading-4">Post queue</h2>
+          <h2 id="post-queue" tabIndex={-1} className="text-heading-4">
+            Post queue
+          </h2>
           <p className="text-body-sm text-muted">
             Times shown in your time zone ({getLocalTimeZone()})
           </p>

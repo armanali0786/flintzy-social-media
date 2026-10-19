@@ -97,7 +97,7 @@ export function PostQueue({
         <section key={group.key} aria-labelledby={`day-${group.key}`}>
           <h3
             id={`day-${group.key}`}
-            className="sticky top-0 z-10 mb-3 flex items-baseline gap-2 bg-canvas-mint py-2 text-body-lg font-bold"
+            className="sticky top-16 z-10 mb-3 flex items-baseline gap-2 bg-canvas-mint sm:top-18 py-2 text-body-lg font-bold"
           >
             {group.label}
             <span className="font-sans text-body-sm text-muted">
